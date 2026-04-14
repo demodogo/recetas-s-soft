@@ -28,7 +28,7 @@ public class Recipe {
   @Column(nullable = false, length = 3000)
   private String description;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_recipes_user"))
   private User user;
 

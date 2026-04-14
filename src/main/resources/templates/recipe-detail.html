@@ -1,0 +1,214 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title th:text="${recipe.title + ' - Detalle'}">Detalle Receta</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			:root {
+				--primary: #f97316;
+				--bg: #f8fafc;
+				--text-main: #0f172a;
+				--text-muted: #64748b;
+				--card-bg: #ffffff;
+				--shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: 'Plus Jakarta Sans', sans-serif;
+				background-color: var(--bg);
+				color: var(--text-main);
+				line-height: 1.6;
+				padding-bottom: 80px;
+			}
+
+			.navbar {
+				padding: 20px 0;
+				background: white;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+				margin-bottom: 40px;
+			}
+
+			.container {
+				max-width: 900px;
+				margin: 0 auto;
+				padding: 0 20px;
+			}
+
+			.back-link {
+				display: inline-flex;
+				align-items: center;
+				color: var(--primary);
+				text-decoration: none;
+				font-weight: 600;
+				margin-bottom: 20px;
+				transition: transform 0.2s ease;
+			}
+
+			.back-link:hover {
+				transform: translateX(-5px);
+			}
+
+			.recipe-header {
+				background: white;
+				padding: 40px;
+				border-radius: 24px;
+				box-shadow: var(--shadow);
+				margin-bottom: 30px;
+			}
+
+			.recipe-header h1 {
+				font-size: 2.5rem;
+				font-weight: 800;
+				margin-bottom: 15px;
+				color: var(--text-main);
+			}
+
+			.rating-badge {
+				display: inline-flex;
+				align-items: center;
+				background: #fef3c7;
+				color: #92400e;
+				padding: 8px 16px;
+				border-radius: 12px;
+				font-weight: 700;
+				margin-bottom: 20px;
+			}
+
+			.description {
+				font-size: 1.1rem;
+				color: var(--text-muted);
+				margin-bottom: 20px;
+			}
+
+			.section-title {
+				font-size: 1.5rem;
+				font-weight: 700;
+				margin: 40px 0 20px;
+				padding-left: 15px;
+				border-left: 4px solid var(--primary);
+			}
+
+			.media-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+				gap: 20px;
+			}
+
+			.media-card {
+				background: white;
+				padding: 15px;
+				border-radius: 16px;
+				box-shadow: var(--shadow);
+				text-align: center;
+			}
+
+			.btn-action {
+				display: inline-block;
+				margin-top: 10px;
+				color: var(--primary);
+				text-decoration: none;
+				font-weight: 600;
+				font-size: 0.9rem;
+			}
+
+			.comment-list {
+				display: flex;
+				flex-direction: column;
+				gap: 20px;
+			}
+
+			.comment-card {
+				background: white;
+				padding: 25px;
+				border-radius: 16px;
+				box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+			}
+
+			.comment-user {
+				font-weight: 700;
+				color: var(--text-main);
+				margin-bottom: 5px;
+				display: block;
+			}
+
+			.comment-content {
+				color: var(--text-muted);
+			}
+
+			.empty-msg {
+				color: var(--text-muted);
+				font-style: italic;
+			}
+
+			.helper-text {
+				color: var(--text-muted);
+				font-size: 0.8rem;
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="navbar">
+			<div class="container">
+				<a href="/recetas" class="back-link">← Volver al listado</a>
+			</div>
+		</nav>
+
+		<main class="container">
+			<article class="recipe-header">
+				<div class="rating-badge">
+					⭐
+					<span th:text="${avgRating != null ? avgRating : '0.0'}">4.5</span> /
+					5.0
+				</div>
+				<h1 th:text="${recipe.title}">Nombre de la Receta</h1>
+				<p class="description" th:text="${recipe.description}">
+					Descripción detallada aquí...
+				</p>
+			</article>
+
+			<section id="media">
+				<h2 class="section-title">Galería de Medios</h2>
+				<div th:if="${media.isEmpty()}" class="empty-msg">
+					<p>No hay recursos multimedia disponibles para esta receta.</p>
+				</div>
+				<div class="media-grid">
+					<div class="media-card" th:each="m : ${media}">
+						<p><strong th:text="${m.type}">Tipo</strong></p>
+						<a th:href="${m.url}" target="_blank" class="btn-action"
+							>Ver Recurso Externo</a
+						>
+						<p class="helper-text">NOTA: Las URLs no son funcionales.</p>
+					</div>
+				</div>
+			</section>
+
+			<section id="comments">
+				<h2 class="section-title">Comentarios de la Comunidad</h2>
+				<div th:if="${comments.isEmpty()}" class="empty-msg">
+					<p>Sé el primero en comentar esta receta.</p>
+				</div>
+				<div class="comment-list">
+					<div class="comment-card" th:each="c : ${comments}">
+						<span class="comment-user" th:text="${c.user.fullName}"
+							>Nombre Usuario</span
+						>
+						<p class="comment-content" th:text="${c.content}">
+							Contenido del comentario...
+						</p>
+					</div>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>

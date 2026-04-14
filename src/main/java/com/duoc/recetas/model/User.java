@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +30,7 @@ public class User {
   @Column(nullable = false, length = 120)
   private String email;
 
+  @JsonIgnore
   @Column(nullable = false, length = 120)
   private String password;
 

@@ -2,6 +2,9 @@ package com.duoc.recetas.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,11 +28,12 @@ public class Rating {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "recipe_id", nullable = false, foreignKey = @ForeignKey(name = "fk_ratings_recipe"))
   private Recipe recipe;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_ratings_user"))
   private User user;
 
@@ -46,6 +50,11 @@ public class Rating {
     this.createdAt = LocalDateTime.now();
   }
 
+  @JsonProperty("recipeId")
+  public Long getRecipeId() {
+    return this.recipe != null ? this.recipe.getId() : null;
+  }
+  
   public Long getId() {
     return id;
   }

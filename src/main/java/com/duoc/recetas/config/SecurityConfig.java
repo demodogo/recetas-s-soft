@@ -32,9 +32,13 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider)
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+                    "/",
+                    "/recetas/**",   
+                    "/error",   
                     "/recetas",
                     "/login",
                     "/auth/login",
+                    "/api/recipes/**",
                     "/css/**",
                     "/js/**",
                     "/images/**"

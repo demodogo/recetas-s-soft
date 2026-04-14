@@ -2,6 +2,8 @@ package com.duoc.recetas.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,17 +24,17 @@ public class Comment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @JsonIgnore
   @JoinColumn(name = "recipe_id", nullable = false, foreignKey = @ForeignKey(name = "fk_comment_recipe"))
   private Recipe recipe;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_comment_user"))
   private User user;
 
   @Column(nullable = false, length = 2000)
   private String content;
-
   @Column(nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
